@@ -12,8 +12,8 @@ PORT = '8080'
 CLASSIFIER = 'classificationbox'
 VALID_FILETYPES = ('.jpg', '.png', '.jpeg')
 
-TEACH_URL = "http://{}:{}/{}/teach".format(IP, PORT, CLASSIFIER)
-HEALTH_URL = "http://{}:{}/readyz".format(IP, PORT)
+TEACH_URL = f"http://{IP}:{PORT}/{CLASSIFIER}/teach"
+HEALTH_URL = f"http://{IP}:{PORT}/readyz"
 
 
 def check_classifier_health():
@@ -40,6 +40,8 @@ def list_folders(directiory='.'):
                and not dir.startswith(directiory)
                and not dir.startswith('.')]
     folders.sort(key=str.lower)
+    print("Folders found:")
+    print(folders)
     return folders
 
 
@@ -60,14 +62,21 @@ def teach_name_by_file(teach_url, name, file_path):
             file_name, response.text))
         return False
 
+    elif response.status_code == 404:
+        print("Teaching of file:{} failed due to :{}".format(
+            file_name, response.text))
+        return False
 
 def main():
     if check_classifier_health():
         for folder_name in list_folders():
             folder_path = os.path.join(os.getcwd(), folder_name)
+            print(f"Entering folder {folder_path}")
             for file in os.listdir(folder_path):
+                
                 if file.endswith(VALID_FILETYPES):
                     file_path = os.path.join(folder_path, file)
+                    print(file_path)
                     teach_name_by_file(teach_url=TEACH_URL,
                                        name=folder_name,
                                        file_path=file_path)
