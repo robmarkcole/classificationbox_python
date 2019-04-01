@@ -11,8 +11,8 @@ IP = 'localhost'
 PORT = '8080'
 CLASSIFIER = 'classificationbox'
 VALID_FILETYPES = ('.jpg', '.png', '.jpeg')
-
-TEACH_URL = f"http://{IP}:{PORT}/{CLASSIFIER}/teach"
+MODEL_NUM = 'classificationbox_model_num'
+TEACH_URL = f"http://{IP}:{PORT}/{CLASSIFIER}/models/{MODEL_NUM}/teach"
 HEALTH_URL = f"http://{IP}:{PORT}/readyz"
 
 
